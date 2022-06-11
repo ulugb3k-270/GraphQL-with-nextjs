@@ -8,8 +8,9 @@ const client = new ApolloClient({
 export default async (req, res) => {
   const search = req.body;
 
-  const { data } = await client.query({
-    query: gql`query{
+  try {
+    const { data } = await client.query({
+      query: gql`query{
                 characters(filter: {name: "${search}"}){
                   info{
                     pages
@@ -38,11 +39,10 @@ export default async (req, res) => {
                   }
                 }
               }`,
-  });
+    });
 
-  if (data.characters.results.length) {
     res.status(200).json({ characters: data.characters.results, error: null });
-  }else{
-    res.status(404).json({characters: [], error: "Not Found"})
+  } catch (error) {
+    res.status(404).json({ characters: null, error: "Not Found" });
   }
 };

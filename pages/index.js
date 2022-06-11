@@ -54,13 +54,10 @@ export default function Home(results) {
               method: "POST",
               body: search,
             });
-            
+
             const { characters, error } = await results.json();
 
-            console.log(results)
-            
-
-            if (!characters.length) {
+            if (error) {
               toast({
                 position: "bottom",
                 title: "An error occured",
